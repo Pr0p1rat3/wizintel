@@ -1,0 +1,9 @@
+services:
+  wizintel:
+    build: .
+    image: wizintel:latest
+    working_dir: /app
+    volumes:
+      - ./data:/app/data
+      - ./config.yml:/app/config.yml:ro
+    command: ["wizintel", "--help"]

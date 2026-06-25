@@ -1,0 +1,45 @@
+app:
+  name: WizIntel
+  data_dir: ./data
+  passive_default: true
+  redact_secrets: true
+  timeout_seconds: 120
+
+collectors:
+  theharvester:
+    enabled: true
+    timeout_seconds: 180
+  subfinder:
+    enabled: true
+    timeout_seconds: 120
+  amass:
+    enabled: true
+    passive_only: true
+    timeout_seconds: 300
+  sherlock:
+    enabled: true
+    timeout_seconds: 180
+  trufflehog:
+    enabled: true
+    redact: true
+    timeout_seconds: 300
+  spiderfoot:
+    enabled: false
+    timeout_seconds: 600
+
+scoring:
+  interesting_keywords:
+    - admin
+    - vpn
+    - portal
+    - dev
+    - test
+    - staging
+    - backup
+    - sso
+    - auth
+    - git
+    - ci
+    - jenkins
+    - grafana
+    - kibana

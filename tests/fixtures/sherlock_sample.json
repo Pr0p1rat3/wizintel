@@ -1,0 +1,10 @@
+{
+  "GitHub": {
+    "url_user": "https://github.com/somehandle",
+    "status": "found"
+  },
+  "ExampleMissing": {
+    "url_user": "https://example.invalid/somehandle",
+    "status": "not found"
+  }
+}

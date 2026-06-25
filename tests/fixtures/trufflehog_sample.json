@@ -1,0 +1,2 @@
+{"DetectorName":"AWS","Verified":true,"Raw":"AKIAIOSFODNN7EXAMPLE","SourceMetadata":{"Data":{"Github":{"file":"config/settings.py","line":12}}}}
+{"DetectorName":"Generic API Key","Verified":false,"Raw":"1234567890abcdef1234567890abcdef","SourceName":"README.md","line":4}

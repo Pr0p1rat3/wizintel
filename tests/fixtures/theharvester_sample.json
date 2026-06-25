@@ -1,0 +1,6 @@
+{
+  "emails": ["Admin@Example.com", "security@example.com"],
+  "hosts": ["www.example.com", "dev.example.com"],
+  "ips": ["203.0.113.30"],
+  "people": ["Example Analyst"]
+}
