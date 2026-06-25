@@ -24,6 +24,12 @@ WizIntel requires a scan scope object for every scan, defaults to passive mode, 
 
 Use WizIntel only for assets, repositories, accounts, and organizations you are authorized to assess.
 
+# Buy me a cuban C0ff33 ^__^
+
+    BTC: bc1qtv8j0l887frldav7k8sdz8nz3n4y6shv7cvnx7
+    ETH: 0x014603d2F6B2D17AECBa2Df7ac3eeAB667bf068d
+
+
 ## Installation
 
 ```bash
