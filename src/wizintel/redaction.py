@@ -6,8 +6,8 @@ import math
 import re
 
 ASSIGNMENT_TOKEN_RE = re.compile(
-    r"(?P<prefix>\b[A-Za-z0-9_.-]*(?:token|secret|api[_-]?key|key|password|pass|auth)"
-    r"[A-Za-z0-9_.-]*\s*=\s*)"
+    r"(?P<prefix>\b[A-Za-z0-9_.-]{0,100}(?:token|secret|api[_-]?key|key|password|pass|auth)"
+    r"[A-Za-z0-9_.-]{0,100}\s*=\s*)"
     r"(?P<token>[A-Za-z0-9][A-Za-z0-9_.-]{19,})",
     re.IGNORECASE,
 )

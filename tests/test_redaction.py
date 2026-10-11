@@ -18,3 +18,27 @@ def test_redact_token_like_strings() -> None:
     redacted = redact_token_like_strings(text)
     assert "abc123XYZ789abc123XYZ789" not in redacted
     assert "abc1" in redacted
+
+def test_redact_token_like_strings_prevents_redos() -> None:
+    import time
+
+    text_fast = "key" + "_" * 1000 + "="
+    t0 = time.time()
+    redact_token_like_strings(text_fast)
+    assert time.time() - t0 < 0.1
+
+    text_fast_2 = "key" + "_" * 10000 + "="
+    t0 = time.time()
+    redact_token_like_strings(text_fast_2)
+    assert time.time() - t0 < 0.1
+
+def test_redact_token_like_strings_works_within_bounds() -> None:
+    text = "key" + "_" * 50 + "=" + "abc123XYZ789abc123XYZ789"
+    redacted = redact_token_like_strings(text)
+    assert "abc123XYZ789abc123XYZ789" not in redacted
+    assert "abc1" in redacted
+
+    text2 = "a" * 50 + "key=" + "abc123XYZ789abc123XYZ789"
+    redacted2 = redact_token_like_strings(text2)
+    assert "abc123XYZ789abc123XYZ789" not in redacted2
+    assert "abc1" in redacted2
