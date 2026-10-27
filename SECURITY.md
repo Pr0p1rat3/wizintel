@@ -8,7 +8,15 @@ WizIntel is defensive, passive-first software for authorized security analysis. 
 
 WizIntel v1 does not store raw secret values from TruffleHog findings. Secret findings retain metadata such as detector type, source file, line number when available, verification status, and a non-reversible fingerprint. Reports use `redacted_value` by default.
 
-Email findings may mask the local part in reports. Sherlock findings are labeled as unverified public profile matches and require analyst validation.
+Email targets and findings are masked by default in JSON, CSV, HTML, and the
+experimental read-only API. This policy also covers recognizable email text in
+exported metadata and nested evidence. Original values remain in the local case
+store; report commands can explicitly export them with `--include-sensitive` to
+separate `.full` files. The API has no full-fidelity export option and no access
+control; it is intended only for trusted local use. See [usage](docs/usage.md) for
+format differences, migration steps, and masking limits.
+
+Sherlock findings are labeled as unverified public profile matches and require analyst validation.
 
 ## Reporting Vulnerabilities
 
