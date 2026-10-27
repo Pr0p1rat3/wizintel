@@ -218,6 +218,13 @@ def report_latest(
         bool, typer.Option("--json", help="Generate JSON report.")
     ] = False,
     csv: Annotated[bool, typer.Option("--csv", help="Generate CSV report.")] = False,
+    include_sensitive: Annotated[
+        bool,
+        typer.Option(
+            "--include-sensitive",
+            help="Export original stored values (including emails) to separate .full files.",
+        ),
+    ] = False,
     config_path: Annotated[
         Path, typer.Option("--config", "-c", help="Config file to load.")
     ] = Path(DEFAULT_CONFIG_FILE),
@@ -229,7 +236,10 @@ def report_latest(
     if scan is None:
         console.print("[red]No scans found.[/red]")
         raise typer.Exit(1)
-    _write_requested_reports(storage, scan.id, html=html, json_report=json_report, csv=csv)
+    _write_requested_reports(
+        storage, scan.id, html=html, json_report=json_report, csv=csv,
+        include_sensitive=include_sensitive,
+    )
 
 
 @report_app.command("case")
@@ -240,6 +250,13 @@ def report_case(
         bool, typer.Option("--json", help="Generate JSON report.")
     ] = False,
     csv: Annotated[bool, typer.Option("--csv", help="Generate CSV report.")] = False,
+    include_sensitive: Annotated[
+        bool,
+        typer.Option(
+            "--include-sensitive",
+            help="Export original stored values (including emails) to separate .full files.",
+        ),
+    ] = False,
     config_path: Annotated[
         Path, typer.Option("--config", "-c", help="Config file to load.")
     ] = Path(DEFAULT_CONFIG_FILE),
@@ -247,7 +264,10 @@ def report_case(
     """Generate or regenerate a case report."""
     config = load_config(config_path)
     storage = Storage(config.db_path)
-    _write_requested_reports(storage, case_id, html=html, json_report=json_report, csv=csv)
+    _write_requested_reports(
+        storage, case_id, html=html, json_report=json_report, csv=csv,
+        include_sensitive=include_sensitive,
+    )
 
 
 def _run_scan(
@@ -289,6 +309,7 @@ def _write_requested_reports(
     html: bool,
     json_report: bool,
     csv: bool,
+    include_sensitive: bool = False,
 ) -> None:
     scan = storage.get_scan(case_id)
     if scan is None:
@@ -296,8 +317,15 @@ def _write_requested_reports(
         raise typer.Exit(1)
     findings = storage.get_findings_for_scan(case_id)
     formats = _requested_formats(html=html, json_report=json_report, csv=csv)
+    if include_sensitive:
+        console.print(
+            "[yellow]Sensitive export: original stored values, including emails. "
+            "Treat .full files as sensitive.[/yellow]"
+        )
     for output_format in formats:
-        path = regenerate_report(scan, findings, output_format=output_format)
+        path = regenerate_report(
+            scan, findings, output_format=output_format, include_sensitive=include_sensitive
+        )
         console.print(f"[green]{output_format.upper()} report:[/green] {path}")
 
 

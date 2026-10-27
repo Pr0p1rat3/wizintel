@@ -128,15 +128,25 @@ def regenerate_report(
     findings: list[Finding],
     *,
     output_format: str,
+    include_sensitive: bool = False,
 ) -> Path:
     """Regenerate a report for an existing case."""
     output_dir = Path(scan.output_dir)
+    suffix = ".full" if include_sensitive else ""
     if output_format == "json":
-        return write_json_report(scan, findings, output_dir / "findings.json")
+        return write_json_report(
+            scan, findings, output_dir / f"findings{suffix}.json",
+            include_sensitive=include_sensitive,
+        )
     if output_format == "csv":
-        return write_csv_report(findings, output_dir / "findings.csv")
+        return write_csv_report(
+            findings, output_dir / f"findings{suffix}.csv", include_sensitive=include_sensitive
+        )
     if output_format == "html":
-        return write_html_report(scan, findings, output_dir / "report.html")
+        return write_html_report(
+            scan, findings, output_dir / f"report{suffix}.html",
+            include_sensitive=include_sensitive,
+        )
     raise ValueError(f"Unsupported report format: {output_format}")
 
 

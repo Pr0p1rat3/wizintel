@@ -5,6 +5,14 @@ from __future__ import annotations
 import math
 import re
 
+# A start boundary prevents retrying a long local-part at every character. The
+# local-part and domain classes have no overlapping repeated groups.
+EMAIL_TEXT_RE = re.compile(
+    r"(?<![\w.!#$%&'*+^`{|}~-])"
+    r"(?P<local>[\w.!#$%&'*+^`{|}~-]+)(?P<separator>@|%40)"
+    r"(?P<domain>[\w-]+(?:\.[\w-]+)*)"
+)
+
 ASSIGNMENT_TOKEN_RE = re.compile(
     r"(?P<prefix>\b[A-Za-z0-9_.-]{0,100}(?:token|secret|api[_-]?key|key|password|pass|auth)"
     r"[A-Za-z0-9_.-]{0,100}\s*=\s*)"
@@ -55,6 +63,18 @@ def redact_token_like_strings(text: str) -> str:
 
     redacted = ASSIGNMENT_TOKEN_RE.sub(replace_assignment, text)
     return TOKEN_RE.sub(replace_bare, redacted)
+
+
+def redact_emails_in_text(text: str) -> str:
+    """Mask recognizable email addresses in free text, URLs, paths, and metadata."""
+
+    def replace(match: re.Match[str]) -> str:
+        return (
+            f"{match.group('local')[0]}***{match.group('separator')}"
+            f"{match.group('domain').lower()}"
+        )
+
+    return EMAIL_TEXT_RE.sub(replace, text)
 
 
 def _shannon_entropy(value: str) -> float:
